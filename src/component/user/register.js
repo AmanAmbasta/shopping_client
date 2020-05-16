@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-
+let url = 'http://localhost:5000/auth/signin'
 class Register extends Component {
     constructor() {
         super();
@@ -21,13 +21,23 @@ class Register extends Component {
         e.preventDefault();
         const data = {
             name: this.state.name,
-            email: this.state.email,
+            username: this.state.email,
             password: this.state.password,
-            mobile: this.state.mobile,
+            mobile: +this.state.mobile,
             gender: this.state.gender
         }
-        console.log(data);
-        alert("😇 😇 😇 New Profile is Created!!!😇 😇 😇 ")
+        fetch(url, {
+            method: 'POST',
+            body: JSON.stringify(data),
+            headers: {
+                'content-type': 'application/json'
+            }
+        })
+        .then(resp => resp.json())
+        .then(data => {
+            console.log(data)
+            alert("😇 😇 😇 New Profile is Created!!!😇 😇 😇 ")
+        })
         
     }
     render() {
@@ -40,24 +50,29 @@ class Register extends Component {
                         name="name"
                         placeholder="Enter your Name"
                         value={this.state.name}
-                        onChange={this.handleChange} />
+                        onChange={this.handleChange}
+                        required />
                     <input
                         type="text"
                         name="email"
                         placeholder="Email id"
                         value={this.state.email}
-                        onChange={this.handleChange} />
+                        onChange={this.handleChange} 
+                        required
+                        />
                     <br />
                     <input
                         type="radio"
                         name="gender"
                         value="male"
+                        required
                         checked={this.state.gender === "male"}
                         onChange={this.handleChange} />Male
                     <input
                         type="radio"
                         name="gender"
                         value="female"
+                        required
                         checked={this.state.gender === "female"}
                         onChange={this.handleChange} />Female
                     <br />
@@ -65,11 +80,12 @@ class Register extends Component {
                         type="password"
                         name="password"
                         placeholder="create new password"
+                        required
                         value={this.state.password}
                         onChange={this.handleChange} />
                     <br />
                     <input
-                        type="text"
+                        type="number"
                         name="mobile"
                         placeholder="Contact number"
                         value={this.state.mobile}

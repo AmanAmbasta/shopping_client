@@ -1,44 +1,68 @@
-import React from 'react';
+import React, { Component } from 'react';
 import Cards from './cards';
 import './style.css';
-let info = [];
-let card_Component;
+
 const Product_url = "http://localhost:5000/product/all";
-function ShowAll() {
-    let isLoading = true;
+class ShowAll extends Component {
+    constructor() {
+        super();
+        this.state = {
+            items: [],
+            isLoading: false
+        }
+    }
+    componentDidMount() {
+        this.setState({ isLoading: true });
+        fetch(Product_url)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Failed to fetch.');
+                }
+                return response.json();
+            })
+            .then(itemsData => {
+                let keyid = 0;
+                this.setState({
+                    items: itemsData.data.map((data) => ({
+                        itemData: data,
+                        id: keyid++
+                    })),
+                    isLoading: false
+                });
+            })
+            .catch(err => {
+                console.log(err);
+            });
+    }
 
-    fetch(Product_url)
-        .then(response => response.json())
-        .then(data => {
-            console.log(data);
-            isLoading = false;
-            info = data.data;
-            console.log(info);
+    render() {
+        let content = <p>Loading characters...</p>;
 
-            let card_Component = info.map(data => {
-            console.log(data);
-            return (<Cards
-                key={data._id}
-                productId={data.productBaseInfo.productId}
-                category={data.productBaseInfo.category}
-                title={data.productAttributes.title}
-                productBrand={data.productAttributes.productBrand}
-                productDescription={data.productAttributes.productDescription}
-                imageUrls={data.productAttributes.imageUrls}
-                maximumRetailAmount={data.Price.maximumRetailAmount}
-                sellingPriceAmount={data.Price.sellingPriceAmount}
-                discountPercentage={data.Price.discountPercentage}
-                currency={data.Price.currency} />)
-        })
-            
-        });
-        
-    return (
-        <div className="wrapper">
-            <div className="items">
-                {card_Component}
-            </div>
-        </div>
-    )
+        if (!this.state.isLoading && this.state.items.length > 0) {
+            content = (
+            this.state.items.map(char => {
+                // {console.log(char.itemData.productAttributes);}
+                return <Cards key={char.id}  data = {char.itemData}/>
+            })
+            );
+        }
+         return (
+                <div className="wrapper">
+                    <div className="items">
+                        {content}
+                    </div>
+                </div>
+            )
+    
+    }
 }
 export default ShowAll;
+        // return (
+        //     <div className="wrapper">
+        //         <div className="items">
+        //             {dataState.loading ? <h1>is Loading</h1> : card_Component}
+        //             {/* <Cards key={dataState.info._id} productId={dataState.info} />         */}
+        //             card_Component is Loading
+        //         </div>
+        //     </div>
+        // )

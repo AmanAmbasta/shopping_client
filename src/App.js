@@ -7,7 +7,7 @@ import Heading from './component/HeaderElement/Heading';
 import Login from './component/user/loginpage';
 import Register from './component/user/register'
 import ProductAddNew from './component/shop/AddNew';
-import ProductShowAll from './component/shop/ShowAll';
+import ShowAll from './component/shop/ShowAll';
 
 import './App.css';
 
@@ -21,7 +21,7 @@ function App() {
           <Route exact path='/register' component={Register} />
           <Route exact path='/login' component={Login} />
           <Route exact path='/product/add' component={ProductAddNew} />
-          <Route exact path='/product/show' component={ProductShowAll} />
+          <Route exact path='/product/show' component={ShowAll} />
         </Switch>
       </Router>
     </div>

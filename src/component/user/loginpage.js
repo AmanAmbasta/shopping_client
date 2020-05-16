@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import "./login.css";
 
-const auth = 'http://localhost:5000/auth/user';
+const auth = 'http://localhost:5000/auth/signup';
 
 class Login extends Component {
     constructor() {
@@ -21,15 +21,16 @@ class Login extends Component {
 
     handleSubmit(e) {
         e.preventDefault();
-        const data = {
-            username: this.state.user,
-            password: this.state.password
-        }
-        if (data.username === "" || data.password === "") {
+        if (this.state.username === "" || this.state.password === "") {
             alert("Hey Complet the Form Please 🤯 🤯 🤯");
-
+            
         }
         else {
+            //Creating Schema of data to be Post
+            const data = {
+                username: this.state.user,
+                password: this.state.password
+            }
             fetch(auth, {
                 method: 'POST',
                 body: JSON.stringify(data),
@@ -41,7 +42,6 @@ class Login extends Component {
                 .catch(alert("OPPS ☹ ☹ ☹ Something went Wrong😱 😱 😱  "));
         }
     }
-
 
     render() {
         return (
